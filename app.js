@@ -3,6 +3,7 @@ const Campground = require('./model/campground')
 const mongoose = require('mongoose')
 const methodOverride=require('method-override')
 const app=express()
+const ejsMate=require('ejs-mate')
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp',{
     useNewUrlParser:true,
@@ -15,6 +16,7 @@ db.once('open',()=>{
     console.log('connected to mongosh')
 })
 
+app.engine('ejs',ejsMate)
 app.set('view engine','ejs')
 app.set('views','views')
 
@@ -46,17 +48,18 @@ app.get('/campgrounds/:id/edit',async (req,res)=>{
 })
 
 app.post('/campgrounds',async (req,res)=>{
-    const {title,location}=req.body.campground
-    const c= new Campground({title:title,location:location})
+    console.log('post request',req.body.campground)
+    const {title,location,price,description,image}=req.body.campground
+    const c= new Campground({title:title,location:location,price:price,image:image,description:description})
     await c.save()
-    res.redirect('/campgrounds')
+    res.redirect(`/campgrounds/${c._id}`)
 })
 
 app.put('/campgrounds/:id',async(req,res)=>{
-    const {title,location}=req.body.campground
+    const {title,location,price,description,image}=req.body.campground
     const {id}=req.params
-    await Campground.findByIdAndUpdate(id,{title:title,location:location})
-    res.redirect('/campgrounds')
+    await Campground.findByIdAndUpdate(id,{title:title,location:location,price:price,image:image,description:description})
+    res.redirect(`/campgrounds/${id}`)
 })
 
 app.delete('/campgrounds/:id', async (req,res)=>{
