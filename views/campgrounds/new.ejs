@@ -2,26 +2,30 @@
     <div class="row">
         <h1 class="text-center">Add a campground</h1>
         <div class="col-6 offset-3 py-2">
-            <form action="/campgrounds" method="POST">
+            <form action="/campgrounds" method="POST" novalidate class="bootstrap-validated">
                 <div class="form-group mb-4">
                     <label for="title">Title</label>
                     <input type="text" class="form-control" id="title" aria-describedby="title"
-                        placeholder="Campground title" name="campground[title]">
+                        placeholder="Campground title" name="campground[title]" required>
+                    <%- include('../partials/inputFeedback') %>
                 </div>
                 <div class="form-group mb-4">
                     <label for="location">Location</label>
                     <input type="text" class="form-control" id="location" aria-describedby="location"
-                        placeholder="Campground location" name="campground[location]">
+                        placeholder="Campground location" name="campground[location]" required>
+                    <%- include('../partials/inputFeedback') %>
                 </div>
                 <div class="form-group mb-4">
                     <label for="description">Description</label>
                     <textarea type="text" class="form-control" id="description" aria-describedby="description"
-                        placeholder="Campground description" name="campground[description]"></textarea>
+                        placeholder="Campground description" name="campground[description]" required></textarea>
+                    <%- include('../partials/inputFeedback') %>
                 </div>
                 <div class="form-group mb-4">
                     <label for="image">Image</label>
                     <input type="text" class="form-control" id="image" aria-describedby="image"
-                        placeholder="Campground image" name="campground[image]">
+                        placeholder="Campground image" name="campground[image]" required>
+                    <%- include('../partials/inputFeedback') %>
                 </div>
                 <div class="mb-3">
                     <label for="price">Price</label>
@@ -30,7 +34,8 @@
                             <span class="input-group-text" id="basic-addon1">$</span>
                         </div>
                         <input type="number" class="form-control" placeholder="0.00" aria-label="price"
-                            aria-describedby="campground price" id="price" name="campground[price]">
+                            aria-describedby="campground price" id="price" name="campground[price]" required>
+                        <%- include('../partials/inputFeedback') %>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success">Add campground</button>
