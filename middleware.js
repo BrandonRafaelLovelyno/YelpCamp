@@ -1,5 +1,7 @@
 const {campgroundSchema,reviewSchema}=require('./validationSchema')
 const ExpressError = require('./utils/ExpressError')
+const Campground=require('./models/campground')
+const Review=require('./models/review')
 
 module.exports.isLoggedIn=(req,res,next)=>{
     if(!req.user){
@@ -20,8 +22,10 @@ module.exports.storeReturnTo=(req,res,next)=>{
     next()
 }
 
-module.exports.isCurrentUserCamp=(req,res,next)=>{
-    if(!req.user._id.equals(req.params.id)){
+module.exports.isCurrentUserCamp=async (req,res,next)=>{
+    const {id}=req.params
+    const campground=await Campground.findById(id)
+    if(!req.user._id.equals(campground.author._id)){
         req.flash('error','Do not have the permission')
         res.redirect(`/campgrounds/${req.params.id}`)
     }else{
@@ -39,8 +43,10 @@ module.exports.validateCampground=(req,res,next)=>{
     }
 }
 
-module.exports.isCurrentUserReview=(req,res,next)=>{
-    if(!req.user||!req.user._id.equals(req.params.reviewId)){
+module.exports.isCurrentUserReview=async(req,res,next)=>{
+    const {reviewId}=req.params
+    const review=await Review.findById(reviewId)
+    if(!req.user||!req.user._id.equals(review.author._id)){
         req.flash('error','Do not have the permission')
         res.redirect(`/campgrounds/${req.params.id}`)
     }else{
