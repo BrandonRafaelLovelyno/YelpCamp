@@ -15,14 +15,19 @@
           <li class="list-group-item text-muted">
             <%= campground.location %>
           </li>
+          <li class="list-group-item text-muted">
+            Uploaded by <%= campground.author.username %>
+          </li>
           <li class="list-group-item">$<%= campground.price %>/night</li>
         </ul>
+        <% if(loggedUser&&loggedUser._id.equals(campground.author._id)){ %>
         <div class="card-body">
           <a href="/campgrounds/<%= campground._id %>/edit" class="card-link btn bg-info text-light">Edit</a>
           <form action="/campgrounds/<%= campground._id %>?_method=DELETE" class="d-inline" method="POST">
             <button class="bg-danger btn text-light">Delete campground</button>
           </form>
         </div>
+        <% } %>
       </div>
     </div>
     <div class="col-6 px-3">
@@ -49,14 +54,17 @@
             <h5 class="card-title">
               <span class="text-muted">Rating : </span><%= review.rating %>
             </h5>
+            <h6 class="card-subtitle text-muted">By <%= review.author.username %></h6>
             <div class="card-text mb-3">
               <%= review.text %>
             </div>
+            <!-- <% if(loggedUser&&loggedUser._id.equals(review.author._id)){ %> -->
             <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
               <button class="btn btn-sm btn-danger">
                 Delete
               </button>
             </form>
+            <% } %>
           </div>
         </div>
       <% } %>
