@@ -13,4 +13,6 @@ router.route('/login')
     .get(user.renderLoginForm)
     .post(storeReturnTo,passport.authenticate('local',{failureFlash:true,failureRedirect:'/login'}),wrapAsync(user.login))
 
+router.get('/logout',user.logOut)
+
 module.exports=router
