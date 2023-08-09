@@ -1,19 +1,27 @@
 <% layout('/layouts/boilerplate') %>
 
-<h1>Login</h1>
-
-<form action="/login" class="bootstrap-validated mt-5" method="POST" novalidate>
-    <div class="form-group mb-4">
-        <label for="Username">Username</label>
-        <input type="text" class="form-control" id="Username" aria-describedby="Username"
-            placeholder="Username" name="username" required>
-        <%- include('../partials/inputFeedback') %>
+<div class="row">
+<div class="col-md-6 offset-md-3">
+   <div class="card p-3 mb-5">
+    <img src="https://images.unsplash.com/photo-1594495894542-a46cc73e081a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80" alt="" class="card-img-top mb-3">
+    <h3 class="card-title">Login</h3>
+    <div class="card-body">
+        <form action="/login" class="bootstrap-validated" method="POST" novalidate>
+            <div class="form-group mb-4">
+                <label for="Username">Username</label>
+                <input type="text" class="form-control" id="Username" aria-describedby="Username"
+                    placeholder="Username" name="username" required autofocus>
+                <%- include('../partials/inputFeedback') %>
+            </div>
+            <div class="form-group mb-4">
+                <label for="Password">Password</label>
+                <input type="password" class="form-control" id="Password" aria-describedby="Password"
+                    placeholder="Password" name="password" required>
+                <%- include('../partials/inputFeedback') %>
+            </div>
+            <button class="btn btn-success">Login</button>
+        </form>
     </div>
-    <div class="form-group mb-4">
-        <label for="Password">Password</label>
-        <input type="password" class="form-control" id="Password" aria-describedby="Password"
-            placeholder="Password" name="password" required>
-        <%- include('../partials/inputFeedback') %>
-    </div>
-    <button class="btn btn-success">Login</button>
-</form>
+   </div>
+</div>
+</div>

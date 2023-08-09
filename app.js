@@ -65,6 +65,9 @@ app.use('/',userRoute)
 app.use('/campgrounds',campgroundRoute)
 app.use('/campgrounds/:id/reviews',reviewRoute)
 
+app.get('/',(req,res)=>{
+    res.render('home')
+})
 
 app.listen(3000,()=>{
     console.log('Listening to port 3000')
