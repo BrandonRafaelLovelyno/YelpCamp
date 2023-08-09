@@ -16,6 +16,8 @@ const userRoute=require('./routes/user')
 const ExpressError=require('./utils/ExpressError')
 const session=require('express-session')
 const flash=require('connect-flash')
+const mongoSanitize=require('express-mongo-sanitize')
+const helmet=require('helmet')
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp',{
@@ -30,11 +32,13 @@ db.once('open',()=>{
 })
 
 const sessionConfig={
-    secret:'tobeupdated',
+    name:'connection',
+    secret:process.env.COOKIES_SECRET,
     resave:false,
     saveUninitialized:true,
     cookie:{
         httpOnly:true,
+        //secure:true,
         expires:Date.now()+1000*60*60*24*7,
         maxAge:1000*60*60*24*7,
     }
@@ -48,6 +52,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(methodOverride('_method'))
 app.use(express.static('public'))
 app.use(session(sessionConfig))
+app.use(mongoSanitize())
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate())) 
