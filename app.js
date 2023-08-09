@@ -2,6 +2,7 @@ if(!process.env.NODE_ENV!=='production'){
     require('dotenv').config()
 }
 
+const dbUrl=process.env.ATLAS_LINK||'mongodb://127.0.0.1:27017/yelp-camp'
 const express = require('express')
 const mongoose = require('mongoose')
 const User=require('./models/user')
@@ -18,9 +19,10 @@ const session=require('express-session')
 const flash=require('connect-flash')
 const mongoSanitize=require('express-mongo-sanitize')
 const helmet=require('helmet')
+const MongoDBStore=require('connect-mongo')
 
 
-mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp',{
+mongoose.connect(dbUrl,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
 })
@@ -31,7 +33,16 @@ db.once('open',()=>{
     console.log('connected to mongosh')
 })
 
+const store=MongoDBStore.create({
+    mongoUrl:dbUrl,
+    touchAfter:24*3600,
+    crypto:{
+        secret:process.env.COOKIES_SECRET
+    }
+})
+
 const sessionConfig={
+    store,
     name:'connection',
     secret:process.env.COOKIES_SECRET,
     resave:false,
@@ -53,6 +64,8 @@ app.use(methodOverride('_method'))
 app.use(express.static('public'))
 app.use(session(sessionConfig))
 app.use(mongoSanitize())
+app.use(helmet({contentSecurityPolicy:false,}))
+
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate())) 
@@ -74,8 +87,10 @@ app.get('/',(req,res)=>{
     res.render('home')
 })
 
-app.listen(3000,()=>{
-    console.log('Listening to port 3000')
+const port=process.env.PORT||3000
+
+app.listen(port,()=>{
+    console.log(`Listening to port ${port}`)
 })
 
 app.use((res,req,next)=>{
